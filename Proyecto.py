@@ -22,7 +22,7 @@ for i in range(clientes):
     direccion = input("Ingresar direccion:")
     telefono = int(input("Numero de telefono:"))
 
-    nombres.append(nombre)
+    nombre.append(nombre)
     correos.append(correo)
     direcciones.append(direccion)
     telefonos.append(telefono)
