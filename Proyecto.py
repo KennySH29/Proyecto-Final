@@ -12,6 +12,7 @@ while usuario != "admin" or clave != "123":
     else:
         print("Acceso denegado, inténtelo otra vez")
 
+<<<<<<< Updated upstream
 
 #Sistema informacion clientes
 clientes = int(input("Ingesar el numero de clientes: "))
