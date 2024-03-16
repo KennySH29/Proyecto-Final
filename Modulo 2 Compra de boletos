@@ -1,0 +1,26 @@
+asientos = [1,2,3,4,5,6,7,8,9,10]
+boletosComprados = []
+opcion = 0
+while opcion!=3:
+    
+    print("\nVenta de boletos. ")
+    print(" 1. Ver boletos disponibles \n 2. Comprar boletos \n 3.Salir")
+    opcion = int(input("Escoja una de las opciones: "))
+
+    if opcion==1:
+        for i in range (0,len(asientos)):
+            print( asientos[i], end=" " )
+
+
+    elif opcion==2:
+        cantidad = 0
+        while cantidad<=0 or cantidad>len(asientos):
+            cantidad = int(input("Cuantos boletos desea comprar: "))
+        for i in range (0,cantidad):
+            print("ingrese el numero del boleto numero", i+1)
+            boleto = int(input())
+            boletosComprados.append(boleto)
+            
+        for i in range (0,len(boletosComprados)):
+            print(boletosComprados[i])
+            asientos.remove(boletosComprados[i])
