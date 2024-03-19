@@ -1,3 +1,7 @@
+#Adrian Guido Rojas, Glenda Rodriguez Morales, Dylan Sanabria Fernández, Melvin Rojas Hernandez, Kenny Salazar Herrera
+    #GRUPO 8
+
+
 #Sistema de seguridad de acceso
 usuario = ""
 clave = ""
