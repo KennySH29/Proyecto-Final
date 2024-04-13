@@ -1,0 +1,98 @@
+asientosHora1 = [1,2,3,4,5,6,7,8,9,10]
+asientosHora2 = [1,2,3,4,5,6,7,8,9,10]
+asientosHora3 = [1,2,3,4,5,6,7,8,9,10]
+boletosComprados1 = []
+boletosComprados2 = []
+boletosComprados3 = []
+tarjetas = []
+horario = 0
+opcion = 0
+print("Venta de boletos: \n")
+while opcion!=3:
+    opcion = int(input("\nEscoja una de las opciones: \n 1. Ver boletos disponibles \n 2. Comprar boletos \n 3.Salir\n"))
+
+    if opcion ==1:
+        while horario !=4:
+            horario = int(input("\nEscoja un horario: \n1. 2:00pm \n2. 6:30pm \n3. 10:00pm \n4. Volver\n"))
+            if horario ==1:
+                for i in range (0,len(asientosHora1)):
+                    print(asientosHora1[i], end=" ")
+                break
+            elif horario ==2:
+                for i in range (0,len(asientosHora2)):
+                    print(asientosHora2[i], end=" ")
+                break
+            elif horario ==3:
+                for i in range (0,len(asientosHora3)):
+                    print(asientosHora3[i], end=" ")
+                break
+            elif horario ==4:
+                break
+
+    if opcion ==2:
+        cantidad = 0
+        horario = 0
+        precio = 2700
+        print("El precio de las entradas es de: ",precio)
+        while horario !=4:
+            horario = int(input("\nEscoja un horario: \n1. 2:00pm \n2. 6:30pm \n3. 10:00pm \n4. Cancelar\n"))
+            if horario ==1:
+                while cantidad<=0 or cantidad>len(asientosHora1):
+                    cantidad = int(input("Ingrese la cantidad de boletos a comprar: "))
+                for i in range (0,cantidad):
+                    print("Ingrese el numero del boleto numero", i+1)
+                    boleto=int(input())
+                    boletosComprados1.append(boleto)
+                    
+                for i in range (0,len(boletosComprados1)):
+                    print(boletosComprados1[i])
+                    asientosHora1.remove(boletosComprados1[i])
+
+            if horario ==2:
+                while cantidad<=0 or cantidad>len(asientosHora2):
+                    cantidad = int(input("Ingrese la cantidad de boletos a comprar: "))
+                for i in range (0,cantidad):
+                    print("Ingrese el numero del boleto numero", i+1)
+                    boleto=int(input())
+                    boletosComprados2.append(boleto)
+                    
+                for i in range (0,len(boletosComprados2)):
+                    print(boletosComprados2[i])
+                    asientosHora2.remove(boletosComprados2[i])
+
+            if horario ==3:
+                while cantidad<=0 or cantidad>len(asientosHora3):
+                    cantidad = int(input("Ingrese la cantidad de boletos a comprar: "))
+                for i in range (0,cantidad):
+                    print("Ingrese el numero del boleto numero", i+1)
+                    boleto=int(input())
+                    boletosComprados3.append(boleto)
+                    
+                for i in range (0,len(boletosComprados3)):
+                    print(boletosComprados3[i])
+                    asientosHora3.remove(boletosComprados3[i])
+
+            if horario ==4:
+                break
+
+            total= precio*cantidad
+            print("Su total es de: ",total)
+            tarjeta = int(input("Ingrese el numero de su tarjeta de Crédito/Débito: "))
+            confirmacion = 0
+            while confirmacion !=1 or confirmacion !=2:
+                confirmacion= int(input("\nDesea confirmar su compra? :\n1. SI \n2. NO \n"))
+                if confirmacion==1:
+                    tarjetas.append(tarjeta)
+                    print("\nMuchas gracias por su compra. Disfrute la película!\n")
+                    break
+                if confirmacion==2:
+                    asientosHora1 = [1,2,3,4,5,6,7,8,9,10]
+                    asientosHora2 = [1,2,3,4,5,6,7,8,9,10]
+                    asientosHora3 = [1,2,3,4,5,6,7,8,9,10]
+                    boletosComprados1 = []
+                    boletosComprados2 = []
+                    boletosComprados3 = []
+                    print("\nVuelva pronto!\n")
+                    break
+            break
+            
