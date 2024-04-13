@@ -1,6 +1,19 @@
 #Adrian Guido Rojas, Glenda Rodriguez Morales, Dylan Sanabria Fernández, Melvin Rojas Hernandez, Kenny Salazar Herrera
     #GRUPO 8
+def agregar_cliente(nombre, direccion, correo, telefono):
+    with open("clientes.txt", "a") as archivo:
+        archivo.write(f"{nombre},{direccion},{correo},{telefono}\n")
 
+# Función para mostrar todos los clientes almacenados en el archivo
+def mostrar_clientes():
+    with open("clientes.txt", "r") as archivo:
+        for linea in archivo:
+            nombre, direccion, correo, telefono = linea.strip().split(",")
+            print("Nombre:", nombre)
+            print("Dirección:", direccion)
+            print("Correo electrónico:", correo)
+            print("Número de teléfono:", telefono)
+            print()
 
 #Sistema de seguridad de acceso
 usuario = ""
@@ -25,11 +38,11 @@ while True:
         correo_Electronico = (input("Introduza su correo electronico: "))
         numero_Telefono = int(input("Introduzca su numero telefonico: "))
 
-        #Almacenamos la informacion en una lista (Diccionario)
-        clientes.append({"Nombre": nombre, "Dirección": direccion, "Correo electrónico": correo_Electronico, "Número de teléfono": numero_Telefono})
 
-for cliente in clientes:
-     print("\nNombre: ", cliente["Nombre"])
-     print("\nDireccion: ", cliente["Dirección"])
-     print("\nCorreo electronico: ", cliente["Correo electrónico"])
-     print("\nNumero de Telefono: ", cliente["Número de teléfono"])
+        agregar_cliente(nombre, direccion, correo_Electronico, numero_Telefono)
+
+# Mostrar todos los clientes almacenados
+print("\nListado de clientes:")
+mostrar_clientes()
+
+  
