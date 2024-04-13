@@ -27,7 +27,7 @@ while usuario != "admin" or clave != "123":
     else:
         print("Acceso denegado, inténtelo otra vez")
 
-clientes = [] #Lista para alamacenar la informacion
+
 
 while True:
         nombre = (input("Ingrese el nombre del cliente (o escriba fin para terminar): "))
