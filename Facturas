@@ -1,4 +1,4 @@
-#ESTOS SON LOS DATOS QUE TIENE QUE ESTAR EN EN LA COMPRA DE LOS BOLETOS
+#ESTOS SON LOS DATOS QUE TIENE QUE ESTAR EN EN LA COMPRA DE LOS BOLETOS PARA QUE SE PUEDA REALIZAR DE LA MANERA CORRECTA, LOS DATOS SERIAN (asiento, fecha de la compra, hora, precio, iva, impuestos y numero de transaccion que es al azar)
 asiento = "1b"
 fecha = "1-04-2024"
 hora = "1:20pm"
@@ -6,7 +6,7 @@ precio = 2000
 iva = precio * 0.13
 impuestos = iva + precio
 numero_transaccion = 1234567890
-#LO HICE ASI PARA QUE ESTE CODIGO FUNCIONE PERO LAS 2 LISTAS SIGUIENTES TIENE QUE ESTAR EN EL CODIGO ORIGINAL
+#LO HICE ASI PARA QUE ESTE CODIGO FUNCIONE PERO LAS 2 LISTAS Y TODO LO SIGUIENTES TIENE QUE ESTAR EN EL CODIGO ORIGINAL
 
 factura =[asiento, fecha, hora, precio, impuestos, numero_transaccion]
 textos = ["asiento:", "fecha:", "hora:", "precio:", "precio con impuestos:", "numero de transaccion:",]
