@@ -1,0 +1,43 @@
+datos_espectadores = [
+    ("Pelicula 1", 10000),
+    ("Pelicula 2", 15000),
+    ("Pelicula 3", 8000),
+    ("Pelicula 4", 19000)
+]
+
+#Variables para almacenar el máximo número de espectadores y el nombre de la película correspondiente
+max_espectadores = 0
+pelicula_max_espectadores = ""
+
+
+for pelicula, espectadores in datos_espectadores:
+    if espectadores > max_espectadores:
+        max_espectadores = espectadores
+        pelicula_max_espectadores = pelicula
+
+# Se muestra en pantalla la película más vista
+print(f"La película más vista este mes es '{pelicula_max_espectadores}' con {max_espectadores} espectadores.")
+
+
+datos_taquilla = [
+    ("Pelicula 1", 1000000),
+    ("Pelicula 2", 1500000),
+    ("Pelicula 3", 800000),
+    ("Pelicula 4", 2000000)
+]
+
+#  Variables para almacenar la máxima taquilla y el nombre de la película correspondiente
+max_taquilla = 0
+pelicula_max_taquilla = ""
+
+
+for pelicula, taquilla in datos_taquilla:
+    if taquilla > max_taquilla:
+        max_taquilla = taquilla
+        pelicula_max_taquilla = pelicula
+
+#Se muestra en pantalla la pelicula con taquilla mas alta
+        
+print(f"La película con la taquilla más alta este primer fin de semana es  '{pelicula_max_taquilla}' con una taquilla de ${max_taquilla}.")
+
+
