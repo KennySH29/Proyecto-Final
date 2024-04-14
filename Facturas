@@ -1,0 +1,38 @@
+#ESTOS SON LOS DATOS QUE TIENE QUE ESTAR EN EN LA COMPRA DE LOS BOLETOS
+asiento = "1b"
+fecha = "1-04-2024"
+hora = "1:20pm"
+precio = 2000
+iva = precio * 0.13
+impuestos = iva + precio
+numero_transaccion = 1234567890
+#LO HICE ASI PARA QUE ESTE CODIGO FUNCIONE PERO LAS 2 LISTAS SIGUIENTES TIENE QUE ESTAR EN EL CODIGO ORIGINAL
+
+factura =[asiento, fecha, hora, precio, impuestos, numero_transaccion]
+textos = ["asiento:", "fecha:", "hora:", "precio:", "precio con impuestos:", "numero de transaccion:",]
+
+
+
+print("1. opcion 1: Quiero mi factura")
+print("2. opcion 2: No deseo factura")
+opcion = int(input("que opcion desea: "))
+
+
+if opcion == 1:
+    
+    print("Se realizo excitosamente su factura")
+    for i in range(len(factura)):
+        print(f"{textos[i]}{factura[i]}")
+   
+elif opcion == 2:
+    print("gracias por su compra")
+
+#BORRAR LISTA (FACTURA)
+print("1. anular factura")
+print("2. salir")
+anular = int(input("¿desea anular la factura?: "))
+if anular == 1:
+    del factura
+elif anular == 2:
+    print("saliedndo")
+
