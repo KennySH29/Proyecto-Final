@@ -124,11 +124,9 @@ def vender_boletos(usuario):
 
                     # Número de transacción Aleatorio
                     numero_transaccion = str(random.randint(1, 999999))
-
                     # Guardar información de la venta 
                     with open("ventas.txt", "a") as archivo:
                         archivo.write(f"{usuario},{horario},{cantidad},{total},{impuestos},{total_con_impuestos},{numero_transaccion}\n")
-
                     print("Su total es de:", total)
                     print("Impuestos:", impuestos)
                     print("Total con impuestos:", total_con_impuestos)
@@ -144,47 +142,32 @@ def vender_boletos(usuario):
                         asientos_disponibles.extend(boletosComprados)
                         print("\nVenta cancelada. Los asientos han sido liberados.\n")
                         break
-
         elif opcion == 3:
             break
         else:
             print("Opción no válida, por favor intente de nuevo.")
-
-# Función para mostrar el historial de ventas
+# Mostrar el historial de ventas
 def mostrar_historial_ventas():
     print("Historial de ventas:\n")
     with open("ventas.txt", "r") as archivo_ventas:
         for linea in archivo_ventas:
             print(linea.strip())
-
         else:
             print("No hay ventas registradas.")
 
-
 def anular_factura(numero_transaccion):
-    # Leer todas las líneas del archivo de ventas
     with open("ventas.txt", "r") as archivo_ventas:
         lineas = archivo_ventas.readlines()
-
-    # Bandera para indicar si se encontró la factura a anular
     factura_encontrada = False
-
-    # Abrir el archivo de ventas en modo escritura para sobrescribirlo
     with open("ventas.txt", "w") as archivo_ventas:
         for linea in lineas:
-            # Verificar si la línea contiene el número de transacción a anular
             if str(numero_transaccion) in linea:
                 factura_encontrada = True
                 print("Factura anulada con éxito.")
-            else:
-                # Escribir las líneas no anuladas en el archivo
+            else:        
                 archivo_ventas.write(linea)
-
-    # Mensaje si no se encuentra la factura
     if not factura_encontrada:
         print("No se encontró ninguna factura con ese número de transacción.")
-
-
 # Menú principal
 while True:
     print("\n1. Agregar cliente")

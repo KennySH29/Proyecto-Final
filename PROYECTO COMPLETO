@@ -2,6 +2,19 @@
 import os
 import random
 
+#Sistema de seguridad de acceso
+usuario = ""
+clave = ""
+
+while usuario != "admin" or clave != "123":
+    usuario = input("Introduzca su usuario: ")
+    clave = input("Introduzca su clave: ")
+    if usuario == "admin" and clave == "123":
+        print("¡Bienvenido!")
+    else:
+        print("Acceso denegado, inténtelo otra vez")
+
+
 dias_disponibles = ["miércoles", "viernes", "sábado", "domingo"]
 horarios_disponibles = ["2:00 pm", "5:00 pm", "7:00 pm", "10:00 pm"]
 peliculas_disponibles = ["Batman", "El terror de los programadores", "Hacking un poco etico", "Ojala saquemos 100 en el proyecto", "Sipderman"]
@@ -13,10 +26,11 @@ dias_vistos_por_pelicula = {pelicula: 0 for pelicula in peliculas_disponibles}
 ventas_mes = []
 total_ganancias_mes = 0
 
+#Agregar un nuevo cliente al archivo
 def agregar_cliente(nombre, direccion, correo, telefono):
     with open("clientes.txt", "a") as archivo:
         archivo.write(f"{nombre},{direccion},{correo},{telefono},activo\n")
-
+# Mostrar todos los clientes
 def mostrar_clientes():
     with open("clientes.txt", "r") as archivo:
         for linea in archivo:
@@ -31,6 +45,7 @@ def mostrar_clientes():
             print("Estado:", estado)
             print()
 
+# Editar la información de un cliente
 def editar_cliente(nombre):
     clientes_actualizados = []
     with open("clientes.txt", "r") as archivo:
@@ -48,6 +63,7 @@ def editar_cliente(nombre):
             archivo.write(",".join(cliente_info) + "\n")
     print("Cliente actualizado con éxito.")
 
+# Inactivar un cliente
 def inactivar_cliente(nombre):
     clientes_actualizados = []
     with open("clientes.txt", "r") as archivo:
@@ -188,7 +204,7 @@ def generar_informe_ventas_mes():
         print("Película más taquillera en los primeros tres días:", pelicula_mas_taquillera)
     else:
         print("No se realizaron ventas en los primeros tres días del mes.")
-
+#Menu Principal
 while True:
     print("\n1. Agregar cliente")
     print("2. Editar cliente")
