@@ -1,12 +1,12 @@
 import os
 import random
 
-# Función para agregar un nuevo cliente al archivo
+#Agregar un nuevo cliente al archivo
 def agregar_cliente(nombre, direccion, correo, telefono):
     with open("clientes.txt", "a") as archivo:
         archivo.write(f"{nombre},{direccion},{correo},{telefono},activo\n")
 
-# Función para mostrar todos los clientes almacenados en el archivo
+# Mostrar todos los clientes
 def mostrar_clientes():
     with open("clientes.txt", "r") as archivo:
         for linea in archivo:
@@ -21,7 +21,7 @@ def mostrar_clientes():
             print("Estado:", estado)
             print()
 
-# Función para editar la información de un cliente
+# Editar la información de un cliente
 def editar_cliente(nombre):
     clientes_actualizados = []
     with open("clientes.txt", "r") as archivo:
@@ -39,7 +39,7 @@ def editar_cliente(nombre):
             archivo.write(",".join(cliente_info) + "\n")
     print("Cliente actualizado con éxito.")
 
-# Función para inactivar un cliente
+# Inactivar un cliente
 def inactivar_cliente(nombre):
     clientes_actualizados = []
     with open("clientes.txt", "r") as archivo:
@@ -53,11 +53,13 @@ def inactivar_cliente(nombre):
             archivo.write(",".join(cliente_info) + "\n")
     print("Cliente inactivado con éxito.")
 
-# Función para vender boletos
+# Vender boletos
 def vender_boletos(usuario):
-    asientosHora1 = list(range(1, 11))
-    asientosHora2 = list(range(1, 11))
-    asientosHora3 = list(range(1, 11))
+   
+    asientosHora1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    asientosHora2 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    asientosHora3 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
     boletosComprados1 = []
     boletosComprados2 = []
     boletosComprados3 = []
@@ -120,10 +122,10 @@ def vender_boletos(usuario):
                     impuestos = total * 0.13
                     total_con_impuestos = total + impuestos
 
-                    # Generar número de transacción
-                    numero_transaccion = str(random.randint(100000, 999999))
+                    # Número de transacción Aleatorio
+                    numero_transaccion = str(random.randint(1, 999999))
 
-                    # Guardar información de la venta en el archivo
+                    # Guardar información de la venta 
                     with open("ventas.txt", "a") as archivo:
                         archivo.write(f"{usuario},{horario},{cantidad},{total},{impuestos},{total_con_impuestos},{numero_transaccion}\n")
 
@@ -138,12 +140,8 @@ def vender_boletos(usuario):
                         print("\n¡Muchas gracias por su compra! ¡Disfrute la película!\n")
                         break
                     elif confirmacion == 2:
-                        if horario == 1:
-                            asientosHora1.extend(boletosComprados)
-                        elif horario == 2:
-                            asientosHora2.extend(boletosComprados)
-                        elif horario == 3:
-                            asientosHora3.extend(boletosComprados)
+                        # Agregar los boletos cancelados de vuelta a la lista de asientos disponibles
+                        asientos_disponibles.extend(boletosComprados)
                         print("\nVenta cancelada. Los asientos han sido liberados.\n")
                         break
 
