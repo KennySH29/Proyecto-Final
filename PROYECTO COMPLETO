@@ -1,0 +1,225 @@
+
+import os
+import random
+
+dias_disponibles = ["miércoles", "viernes", "sábado", "domingo"]
+horarios_disponibles = ["2:00 pm", "5:00 pm", "7:00 pm", "10:00 pm"]
+peliculas_disponibles = ["Batman", "El terror de los programadores", "Hacking un poco etico", "Ojala saquemos 100 en el proyecto", "Sipderman"]
+
+asientos_por_pelicula = {pelicula: list(range(1, 11)) for pelicula in peliculas_disponibles}
+boletos_vendidos_por_pelicula = {pelicula: 0 for pelicula in peliculas_disponibles}
+dias_vistos_por_pelicula = {pelicula: 0 for pelicula in peliculas_disponibles}
+
+ventas_mes = []
+total_ganancias_mes = 0
+
+def agregar_cliente(nombre, direccion, correo, telefono):
+    with open("clientes.txt", "a") as archivo:
+        archivo.write(f"{nombre},{direccion},{correo},{telefono},activo\n")
+
+def mostrar_clientes():
+    with open("clientes.txt", "r") as archivo:
+        for linea in archivo:
+            cliente_info = linea.strip().split(",")
+            nombre, direccion, correo, telefono = cliente_info[:4]
+            activo = cliente_info[4] if len(cliente_info) == 5 else "activo"
+            estado = "Activo" if activo == "activo" else "Inactivo"
+            print("Nombre:", nombre)
+            print("Dirección:", direccion)
+            print("Correo electrónico:", correo)
+            print("Número de teléfono:", telefono)
+            print("Estado:", estado)
+            print()
+
+def editar_cliente(nombre):
+    clientes_actualizados = []
+    with open("clientes.txt", "r") as archivo:
+        for linea in archivo:
+            cliente_info = linea.strip().split(",")
+            if cliente_info[0] == nombre:
+                direccion = input("Nueva dirección (dejar en blanco para no cambiar): ") or cliente_info[1]
+                correo = input("Nuevo correo electrónico (dejar en blanco para no cambiar): ") or cliente_info[2]
+                telefono = input("Nuevo número de teléfono (dejar en blanco para no cambiar): ") or cliente_info[3]
+                activo = cliente_info[4] if len(cliente_info) == 5 else "activo"
+                cliente_info = [nombre, direccion, correo, telefono, activo]
+            clientes_actualizados.append(cliente_info)
+    with open("clientes.txt", "w") as archivo:
+        for cliente_info in clientes_actualizados:
+            archivo.write(",".join(cliente_info) + "\n")
+    print("Cliente actualizado con éxito.")
+
+def inactivar_cliente(nombre):
+    clientes_actualizados = []
+    with open("clientes.txt", "r") as archivo:
+        for linea in archivo:
+            cliente_info = linea.strip().split(",")
+            if cliente_info[0] == nombre:
+                cliente_info[-1] = "inactivo"
+            clientes_actualizados.append(cliente_info)
+    with open("clientes.txt", "w") as archivo:
+        for cliente_info in clientes_actualizados:
+            archivo.write(",".join(cliente_info) + "\n")
+    print("Cliente inactivado con éxito.")
+
+def generar_factura(pelicula, dia, horario, asientos_elegidos):
+    precio_boleto = 2500
+    iva = 0.13
+    total_sin_iva = len(asientos_elegidos) * precio_boleto
+    total_con_iva = total_sin_iva * (1 + iva)
+
+    print("\n--- Factura ---")
+    print("Película:", pelicula)
+    print("Día de la función:", dia)
+    print("Horario de la función:", horario)
+    print("Asientos comprados:", asientos_elegidos)
+    print("Precio por boleto (sin impuesto):", precio_boleto)
+    print("Total a pagar (sin impuesto):", total_sin_iva)
+    print("Total a pagar (con impuesto):", total_con_iva)
+
+    return total_con_iva
+
+def vender_boletos(usuario):
+    global total_ganancias_mes
+    print("Venta de boletos:\n")
+    while True:
+        dia_elegido = input("Escoja el día de la función (miércoles, viernes, sábado, domingo): ").lower()
+        if dia_elegido in dias_disponibles:
+            break
+        else:
+            print("Día no válido. Intente nuevamente.")
+
+    print("Horarios disponibles: 2:00 pm, 5:00 pm, 7:00 pm, 10:00 pm")
+    while True:
+        horario_elegido = input("Escoja el horario de la función (2, 5, 7, 10): ")
+        if horario_elegido in ['2', '5', '7', '10']:
+            break
+        else:
+            print("Horario no válido. Intente nuevamente.")
+
+    horario_elegido = f"{horario_elegido}:00 pm"
+
+    print("Peliculas disponibles:")
+    for i, pelicula in enumerate(peliculas_disponibles, 1):
+        print(f"{i}. {pelicula}")
+
+    while True:
+        try:
+            pelicula_elegida = int(input("Escoja la película que desea ver (1-5): "))
+            if 1 <= pelicula_elegida <= 5:
+                break
+            else:
+                print("Opción no válida. Intente nuevamente.")
+        except ValueError:
+            print("Entrada no válida. Intente nuevamente.")
+
+    pelicula_elegida = peliculas_disponibles[pelicula_elegida - 1]
+
+    asientos_disponibles = asientos_por_pelicula[pelicula_elegida]
+    cantidad = int(input("Ingrese la cantidad de boletos a comprar: "))
+
+    # Mostrar asientos disponibles
+    print(f"Asientos disponibles para la película {pelicula_elegida} en el día {dia_elegido} y horario {horario_elegido}:")
+    print(asientos_disponibles)
+
+    if 0 < cantidad <= len(asientos_disponibles):
+        asientos_elegidos = []
+        for i in range(cantidad):
+            while True:
+                boleto = int(input(f"Ingrese el número del boleto {i + 1}: "))
+                if boleto in asientos_disponibles:
+                    asientos_elegidos.append(boleto)
+                    asientos_disponibles.remove(boleto)
+                    break
+                else:
+                    print("Número de boleto no válido o ya comprado. Intente de nuevo.")
+
+        total_a_pagar = generar_factura(pelicula_elegida, dia_elegido, horario_elegido, asientos_elegidos)
+        boletos_vendidos_por_pelicula[pelicula_elegida] += cantidad
+        dias_vistos_por_pelicula[pelicula_elegida] += 1
+        total_ganancias_mes += total_a_pagar
+
+        # Actualizar el registro de ventas del mes
+        venta = {
+            "pelicula": pelicula_elegida,
+            "dia": dia_elegido,
+            "horario": horario_elegido,
+            "cantidad_boletos": cantidad,
+            "total_a_pagar": total_a_pagar
+        }
+        ventas_mes.append(venta)
+
+        # Opción para anular factura
+        anular_factura = input("¿Desea anular esta factura? (s/n): ").lower()
+        if anular_factura == "s":
+            ventas_mes.remove(venta)
+            print("Factura anulada.")
+            return
+
+        return total_a_pagar
+    else:
+        print("Cantidad no válida. La venta ha sido cancelada.")
+
+def generar_informe_ventas_mes():
+    print("\n--- Informe de ventas del mes ---")
+    total_boletos_vendidos = sum(venta["cantidad_boletos"] for venta in ventas_mes)
+    print("Total de boletos vendidos en el mes:", total_boletos_vendidos)
+
+    peliculas_vistas_mes = set(venta["pelicula"] for venta in ventas_mes)
+    if peliculas_vistas_mes:
+        print("Películas vistas en el mes:")
+        for pelicula in peliculas_vistas_mes:
+            print(f"- {pelicula}: {dias_vistos_por_pelicula[pelicula]} veces")
+    else:
+        print("No se vendieron boletos este mes.")
+
+    pelicula_mas_vista = max(dias_vistos_por_pelicula, key=dias_vistos_por_pelicula.get)
+    print("Película más vista:", pelicula_mas_vista)
+
+    primeros_tres_dias = [venta for venta in ventas_mes if venta["dia"] in ["viernes", "sábado", "domingo"]]
+    if primeros_tres_dias:
+        peliculas_mas_taquilleras = {}
+        for venta in primeros_tres_dias:
+            if venta["pelicula"] not in peliculas_mas_taquilleras:
+                peliculas_mas_taquilleras[venta["pelicula"]] = venta["total_a_pagar"]
+            else:
+                peliculas_mas_taquilleras[venta["pelicula"]] += venta["total_a_pagar"]
+
+        pelicula_mas_taquillera = max(peliculas_mas_taquilleras, key=peliculas_mas_taquilleras.get)
+        print("Película más taquillera en los primeros tres días:", pelicula_mas_taquillera)
+    else:
+        print("No se realizaron ventas en los primeros tres días del mes.")
+
+while True:
+    print("\n1. Agregar cliente")
+    print("2. Editar cliente")
+    print("3. Inactivar cliente")
+    print("4. Mostrar clientes")
+    print("5. Vender boletos")
+    print("6. Generar informe de ventas del mes")
+    print("7. Salir")
+    opcion = input("Seleccione una opción: ")
+    if opcion == "1":
+        nombre = input("Ingrese el nombre del cliente: ")
+        direccion = input("Introduzca su dirección: ")
+        correo = input("Introduzca su correo electrónico: ")
+        telefono = input("Introduzca su número de teléfono: ")
+        agregar_cliente(nombre, direccion, correo, telefono)
+    elif opcion == "2":
+        nombre = input("Ingrese el nombre del cliente a editar: ")
+        editar_cliente(nombre)
+    elif opcion == "3":
+        nombre = input("Ingrese el nombre del cliente a inactivar: ")
+        inactivar_cliente(nombre)
+    elif  opcion == "4":
+        print("\nListado de clientes:")
+        mostrar_clientes()
+    elif opcion == "5":
+        usuario = input("Ingrese su nombre de usuario: ")
+        vender_boletos(usuario)
+    elif opcion == "6":
+        generar_informe_ventas_mes()
+    elif opcion == "7":
+        print("Saliendo del programa.")
+        break
+    else:
+        print("Opción no válida, inténtelo de nuevo.")
