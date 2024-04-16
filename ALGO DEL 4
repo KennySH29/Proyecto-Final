@@ -1,0 +1,168 @@
+
+import os
+import random
+
+dias_disponibles = ["miércoles", "viernes", "sábado", "domingo"]
+horarios_disponibles = ["2:00 pm", "5:00 pm", "7:00 pm", "10:00 pm"]
+peliculas_disponibles = ["Batman", "El terror de los programadores", "Hacking un poco etico", "Ojala saquemos 100 en el proyecto", "Sipderman"]
+
+asientos_por_pelicula = {pelicula: list(range(1, 11)) for pelicula in peliculas_disponibles}
+boletos_vendidos_por_pelicula = {pelicula: 0 for pelicula in peliculas_disponibles}
+dias_vistos_por_pelicula = {pelicula: 0 for pelicula in peliculas_disponibles}
+
+def agregar_cliente(nombre, direccion, correo, telefono):
+    with open("clientes.txt", "a") as archivo:
+        archivo.write(f"{nombre},{direccion},{correo},{telefono},activo\n")
+
+def mostrar_clientes():
+    with open("clientes.txt", "r") as archivo:
+        for linea in archivo:
+            cliente_info = linea.strip().split(",")
+            nombre, direccion, correo, telefono = cliente_info[:4]
+            activo = cliente_info[4] if len(cliente_info) == 5 else "activo"
+            estado = "Activo" if activo == "activo" else "Inactivo"
+            print("Nombre:", nombre)
+            print("Dirección:", direccion)
+            print("Correo electrónico:", correo)
+            print("Número de teléfono:", telefono)
+            print("Estado:", estado)
+            print()
+
+def editar_cliente(nombre):
+    clientes_actualizados = []
+    with open("clientes.txt", "r") as archivo:
+        for linea in archivo:
+            cliente_info = linea.strip().split(",")
+            if cliente_info[0] == nombre:
+                direccion = input("Nueva dirección (dejar en blanco para no cambiar): ") or cliente_info[1]
+                correo = input("Nuevo correo electrónico (dejar en blanco para no cambiar): ") or cliente_info[2]
+                telefono = input("Nuevo número de teléfono (dejar en blanco para no cambiar): ") or cliente_info[3]
+                activo = cliente_info[4] if len(cliente_info) == 5 else "activo"
+                cliente_info = [nombre, direccion, correo, telefono, activo]
+            clientes_actualizados.append(cliente_info)
+    with open("clientes.txt", "w") as archivo:
+        for cliente_info in clientes_actualizados:
+            archivo.write(",".join(cliente_info) + "\n")
+    print("Cliente actualizado con éxito.")
+
+def inactivar_cliente(nombre):
+    clientes_actualizados = []
+    with open("clientes.txt", "r") as archivo:
+        for linea in archivo:
+            cliente_info = linea.strip().split(",")
+            if cliente_info[0] == nombre:
+                cliente_info[-1] = "inactivo"
+            clientes_actualizados.append(cliente_info)
+    with open("clientes.txt", "w") as archivo:
+        for cliente_info in clientes_actualizados:
+            archivo.write(",".join(cliente_info) + "\n")
+    print("Cliente inactivado con éxito.")
+
+def vender_boletos(usuario):
+    print("Venta de boletos:\n")
+    while True:
+        dia_elegido = input("Escoja el día de la función (miércoles, viernes, sábado, domingo): ").lower()
+        if dia_elegido in dias_disponibles:
+            break
+        else:
+            print("Día no válido. Intente nuevamente.")
+
+    print("Horarios disponibles: 2:00 pm, 5:00 pm, 7:00 pm, 10:00 pm")
+    while True:
+        horario_elegido = input("Escoja el horario de la función (2, 5, 7, 10): ")
+        if horario_elegido in ['2', '5', '7', '10']:
+            break
+        else:
+            print("Horario no válido. Intente nuevamente.")
+
+    horario_elegido = f"{horario_elegido}:00 pm"
+
+    print("Peliculas disponibles:")
+    for i, pelicula in enumerate(peliculas_disponibles, 1):
+        print(f"{i}. {pelicula}")
+
+    while True:
+        try:
+            pelicula_elegida = int(input("Escoja la película que desea ver (1-5): "))
+            if 1 <= pelicula_elegida <= 5:
+                break
+            else:
+                print("Opción no válida. Intente nuevamente.")
+        except ValueError:
+            print("Entrada no válida. Intente nuevamente.")
+
+    pelicula_elegida = peliculas_disponibles[pelicula_elegida - 1]
+
+    asientos_disponibles = asientos_por_pelicula[pelicula_elegida]
+    cantidad = int(input("Ingrese la cantidad de boletos a comprar: "))
+
+    # Mostrar asientos disponibles
+    print(f"Asientos disponibles para la película {pelicula_elegida} en el día {dia_elegido} y horario {horario_elegido}:")
+    print(asientos_disponibles)
+
+    if 0 < cantidad <= len(asientos_disponibles):
+        asientos_elegidos = []
+        for i in range(cantidad):
+            while True:
+                boleto = int(input(f"Ingrese el número del boleto {i + 1}: "))
+                if boleto in asientos_disponibles:
+                    asientos_elegidos.append(boleto)
+                    asientos_disponibles.remove(boleto)
+                    break
+                else:
+                    print("Número de boleto no válido o ya comprado. Intente de nuevo.")
+
+        print("¡Compra realizada con éxito!")
+        print("Asientos elegidos:", asientos_elegidos)
+
+        # Incrementar el contador de días vistos para la película elegida
+        dias_vistos_por_pelicula[pelicula_elegida] += 1
+
+    else:
+        print("Cantidad no válida. La venta ha sido cancelada.")
+
+def generar_informe():
+    # Calcular la película más vista
+    pelicula_mas_vista = max(dias_vistos_por_pelicula, key=dias_vistos_por_pelicula.get)
+
+    # Calcular la película con mayor taquilla en los primeros días
+    pelicula_mas_taquilla = max(boletos_vendidos_por_pelicula, key=boletos_vendidos_por_pelicula.get)
+
+    print("\n--- Informe del mes ---")
+    print("Pelicula más vista:", pelicula_mas_vista)
+    print("Pelicula con mayor taquilla en los primeros días:", pelicula_mas_taquilla)
+
+while True:
+    print("\n1. Agregar cliente")
+    print("2. Editar cliente")
+    print("3. Inactivar cliente")
+    print("4. Mostrar clientes")
+    print("5. Vender boletos")
+    print("6. Generar informe del mes")
+    print("7. Salir")
+    opcion = input("Seleccione una opción: ")
+    if opcion == "1":
+        nombre = input("Ingrese el nombre del cliente: ")
+        direccion = input("Introduzca su dirección: ")
+        correo = input("Introduzca su correo electrónico: ")
+        telefono = input("Introduzca su número de teléfono: ")
+        agregar_cliente(nombre, direccion, correo, telefono)
+    elif opcion == "2":
+        nombre = input("Ingrese el nombre del cliente a editar: ")
+        editar_cliente(nombre)
+    elif opcion == "3":
+        nombre = input("Ingrese el nombre del cliente a inactivar: ")
+        inactivar_cliente(nombre)
+    elif  opcion == "4":
+        print("\nListado de clientes:")
+        mostrar_clientes()
+    elif opcion == "5":
+        usuario = input("Ingrese su nombre de usuario: ")
+        vender_boletos(usuario)
+    elif opcion == "6":
+        generar_informe()
+    elif opcion == "7":
+        print("Saliendo del programa.")
+        break
+    else:
+        print("Opción no válida, inténtelo de nuevo.")
